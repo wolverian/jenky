@@ -1,98 +1,120 @@
+$(function() {
 // TODO: update view elements in-place instead of removing and appending them again
 // TODO: progress bar
 // TODO: test count
 
-function Jenkins(url) {
-    this.base = url;
-}
+    function Jenkins(url) {
+        this.base = url;
+    }
 
-Jenkins.prototype.jobs = function() {
-    return $.ajax({
-        url: this.url(''),
-        dataType: 'jsonp',
-        jsonp: 'jsonp'
-    });
-};
+    Jenkins.prototype.jobs = function() {
+        var deferred = $.Deferred();
 
-Jenkins.prototype.url = function(path) {
-    return this.base + path + '/api/json';
-};
+        $.ajax({
+            url:      this.url(''),
+            dataType: 'jsonp',
+            jsonp:    'jsonp'
+        }).then(function(data) {
+                deferred.resolve(data.jobs);
+            }, this);
 
-function View(list) {
-    this.list = list;
-    this.jobs = {};
-}
-
-View.prototype.add = function(job) {
-    var key = this.key(job);
-    var view = this.jobs[key];
-
-    if (typeof view === "undefined")
-        this.jobs[key] = new JobView(job);
-    else
-        view.update(job);
-};
-
-View.prototype.key = function(job) {
-    return job.name;
-};
-
-View.prototype.addAll = function(jobs) {
-    _.each(jobs, function(job, index) {
-        this.add(job);
-    }, this);
-};
-
-View.prototype.render = function() {
-    var base = $(this.list);
-
-    base.empty();
-
-    _.each(this.jobs, function(job, key) {
-        base.append(job.elem);
-    }, this);
-};
-
-function JobView(job) {
-    this.update(job);
-}
-
-JobView.prototype.update = function(job) {
-    this.job = job;
-    this.elem = this.render();
-};
-
-JobView.prototype.render = function() {
-    var elem = $('<h2>', {
-        text: this.job.name,
-        'class': this.job.color
-    });
-    return $('<li>').append(elem);
-};
-
-function Controller(view, model) {
-    this.view = view;
-    this.model = model;
-
-    var update = _.bind(function() {
-        this.update();
-    }, this);
-
-    var delayed = function() {
-        update();
-        _.delay(delayed, 10000);
+        return deferred.promise();
     };
 
-    delayed();
-}
+    Jenkins.prototype.duration = function(name) {
+        var deferred = $.Deferred();
 
-Controller.prototype.update = function() {
-    this.model.jobs().then(_.bind(function(jobs) {
-        this.view.addAll(jobs.jobs);
-        this.view.render();
-    }, this));
-};
+        $.ajax({
+            url:      this.url('job/' + name),
+            dataType: 'jsonp',
+            jsonp:    'jsonp'
+        }).then(_.bind(function(job) {
+            $.ajax({
+                url:      job.lastBuild.url + '/api/json',
+                dataType: 'jsonp',
+                jsonp:    'jsonp'
+            }).then(_.bind(function(build) {
+                var progress = build.duration;
+                var estimate = build.estimatedDuration;
 
-var jenkins = new Jenkins('http://deveo.office.eficode.fi:8080');
-var view = new View('#jobs');
-var controller = new Controller(view, jenkins);
+                deferred.resolve({
+                    progress: progress,
+                    estimate: estimate
+                });
+            }, this));
+        }, this));
+
+        return deferred.promise();
+    };
+
+    Jenkins.prototype.url = function(path) {
+        return this.base + '/' + path + '/api/json';
+    };
+
+    var Job = Backbone.Model.extend({});
+
+    var JobsList = Backbone.Collection.extend({
+        model: Job,
+        url: 'http://deveo.office.eficode.fi:8080/api/json',
+        parse: function(response) {
+            return _.map(response.jobs, function(job) {
+                return {
+                    name: job.name
+                };
+            });
+        },
+        sync: function(method, model, options) {
+            if (method === "read") {
+                $.ajax({
+                    url: this.url,
+                    dataType: 'jsonp',
+                    jsonp: 'jsonp'
+                }).then(_.bind(function(data) {
+                    var jobs = this.parse(data);
+
+                    _.each(jobs, function(job) {
+                        model.add(job);
+                    }, this);
+                }, this));
+            }
+        }
+    });
+
+    var Jobs = new JobsList();
+
+    var JobView = Backbone.View.extend({
+        tagName:    "li",
+        template:   _.template($('#job-template').html()),
+        initialize: function() {
+            this.model.bind('change', this.render, this);
+            this.model.bind('destroy', this.remove, this);
+        },
+        render:     function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        }
+    });
+
+    var AppView = Backbone.View.extend({
+        el:         $('#jobs'),
+        initialize: function() {
+            Jobs.bind('add', this.addOne, this);
+            Jobs.bind('reset', this.addAll, this);
+            Jobs.bind('all', this.render, this);
+            Jobs.fetch();
+        },
+        render:     function() {
+        },
+        addOne:     function(job) {
+            var view = new JobView({model: job});
+            this.$el.append(view.render().el);
+        },
+        addAll:     function() {
+            Todos.each(this.addOne);
+        }
+    });
+
+    var jenkins = new Jenkins('http://deveo.office.eficode.fi:8080');
+
+    var App = new AppView();
+});

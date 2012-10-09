@@ -9,7 +9,7 @@
         <title>jenky</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <meta http-equiv="refresh" content="10">
+        <meta http-equiv="refresh" content="300">
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
@@ -28,13 +28,20 @@
 
         <footer>
             <p>
-                Development mode. Refreshes page every 10 seconds.
+                Development mode. Refreshes page every 300 seconds.
             </p>
         </footer>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script src="js/vendor/underscore-1.4.2.js"></script>
+        <script src="js/vendor/backbone-0.9.2.js"></script>
         <script src="js/plugins.js"></script>
         <script src="js/main.js"></script>
+
+        <script type="text/template" id="job-template">
+            <li>
+                <h2><%= name %></h2>
+            </li>
+        </script>
     </body>
 </html>
