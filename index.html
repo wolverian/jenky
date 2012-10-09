@@ -40,7 +40,12 @@
 
         <script type="text/template" id="job-template">
             <li>
-                <h2><%= name %></h2>
+                <h2 class="<%= color %>"><%= name %></h2>
+                <% if (duration) { %>
+                    <progress max="<%= duration %>" value="<%= progress %>">
+                        <%= progress %> / <%= duration %>
+                    </progress>
+                <% } %>
             </li>
         </script>
     </body>

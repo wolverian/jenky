@@ -51,7 +51,27 @@ $(function() {
         return this.base + '/' + path + '/api/json';
     };
 
-    var Job = Backbone.Model.extend({});
+    var Job = Backbone.Model.extend({
+        idAttribute: 'name',
+        initialize: function() {
+            if (this.get('color') === "blue_anime")
+                this.fetchProgress();
+        },
+        fetchProgress: function() {
+            $.ajax({
+                url: this.get('url') + '/lastBuild/api/json',
+                dataType: 'jsonp',
+                jsonp: 'jsonp'
+            }).then(_.bind(function(response) {
+                console.log('updating myself', response);
+
+                this.set({
+                    progress: response.duration,
+                    duration: response.estimatedDuration
+                });
+            }, this));
+        }
+    });
 
     var JobsList = Backbone.Collection.extend({
         model: Job,
@@ -59,9 +79,12 @@ $(function() {
         parse: function(response) {
             return _.map(response.jobs, function(job) {
                 return {
-                    name: job.name
+                    name: job.name,
+                    color: job.color,
+                    duration: job.duration,
+                    url: job.url
                 };
-            });
+            }, this);
         },
         sync: function(method, model, options) {
             if (method === "read") {
@@ -106,6 +129,7 @@ $(function() {
         render:     function() {
         },
         addOne:     function(job) {
+            console.log('view.addOne');
             var view = new JobView({model: job});
             this.$el.append(view.render().el);
         },
@@ -116,5 +140,5 @@ $(function() {
 
     var jenkins = new Jenkins('http://deveo.office.eficode.fi:8080');
 
-    var App = new AppView();
+    var App = window.App = new AppView();
 });

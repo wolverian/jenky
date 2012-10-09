@@ -113,6 +113,11 @@ h2 {
     font-size: 100px;
 }
 
+h2 + progress {
+    margin-top: -83px;
+    margin-bottom: 83px;
+}
+
 .blue {
 }
 
@@ -133,7 +138,17 @@ ul {
     padding-left: 0;
 }
 
+progress {
+    width: 500px;
+    height: 10px;
+    border: none;
+    background: #eee;
+    color: #333;
+}
 
+progress::-webkit-progress-bar {
+    background: #eee;
+}
 
 
 
