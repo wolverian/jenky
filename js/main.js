@@ -1,4 +1,6 @@
 // TODO: update view elements in-place instead of removing and appending them again
+// TODO: progress bar
+// TODO: test count
 
 function Jenkins(url) {
     this.base = url;

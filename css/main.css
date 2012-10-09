@@ -98,16 +98,26 @@ textarea {
     src: url(../fonts/TitilliumMaps29L.otf);
 }
 
+body {
+    font-family: Titillium, "Helvetica Neue", sans-serif;
+    font-weight: 300;
+    padding: 50px;
+}
+
 h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
 }
 
 h2 {
-    font-family: Titillium, Helvetica Neue, sans-serif;
+    margin-top: 0;
     font-size: 100px;
 }
 
 .blue {
+}
+
+.blue_anime {
+    color: #00bfff;
 }
 
 .red {
@@ -120,6 +130,7 @@ h2 {
 
 ul {
     list-style: none;
+    padding-left: 0;
 }
 
 
