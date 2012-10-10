@@ -60,10 +60,6 @@ $(function() {
 
     var Jobs = new JobsList();
 
-    Jobs.bind('all', function(name) {
-        console.log("event: " + name);
-    });
-
     var JobView = Backbone.View.extend({
         tagName: "li",
         template: _.template($('#job-template').html()),
