@@ -6,22 +6,23 @@ $(function() {
     var Job = Backbone.Model.extend({
         idAttribute: 'name',
         initialize: function() {
-            if (this.get('color') === "blue_anime")
-                this.fetchProgress();
+            this.fetchBuildInformation();
             this.set('displayName', this.displayName());
             this.on('change:name', _.bind(function() {
                 this.set('displayName', this.displayName());
             }, this));
         },
-        fetchProgress: function() {
+        fetchBuildInformation: function() {
             $.ajax({
                 url: this.get('url') + '/lastBuild/api/json',
                 dataType: 'jsonp',
                 jsonp: 'jsonp'
             }).then(_.bind(function(response) {
                 this.set({
+                    status: response.result ? 'done' : 'inProgress',
                     progress: response.duration,
-                    duration: response.estimatedDuration
+                    duration: response.estimatedDuration,
+                    result: response.result
                 });
             }, this));
         },

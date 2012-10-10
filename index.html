@@ -43,10 +43,12 @@
         <script type="text/template" id="job-template">
             <li>
                 <h2 class="<%= color %>"><%= displayName %></h2>
-                <% if (duration) { %>
-                    <progress max="<%= duration %>" value="<%= progress %>">
-                        <%= progress %> / <%= duration %>
-                    </progress>
+                <% if (status === "inProgress") { %>
+                    <p><%= progress %> / <%= duration %></p>
+                <% } else { %>
+                    <% if (failed) { %>
+                        <%= failed %> / <%= total %>
+                    <% } %>
                 <% } %>
             </li>
         </script>
