@@ -22,7 +22,8 @@ $(function() {
                     status: response.result ? 'done' : 'inProgress',
                     progress: response.duration,
                     duration: response.estimatedDuration,
-                    result: response.result
+                    result: response.result,
+                    failed: response.failed
                 });
             }, this));
         },
@@ -70,6 +71,7 @@ $(function() {
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
+            this.$el.find('.progress').trigger('jenky:progress');
             return this;
         }
     });
@@ -86,7 +88,7 @@ $(function() {
         },
         addOne: function(job) {
             var view = new JobView({model: job});
-            this.$el.append(view.render().el);
+            $(view.render().el).appendTo(this.$el);
         },
         addAll: function() {
             this.$el.empty();
@@ -99,7 +101,18 @@ $(function() {
 
     var App = window.App = new AppView();
 
-    window.setInterval(function() {
-        App.update();
-    }, 5000);
+//    window.setInterval(function() {
+//        App.update();
+//    }, 10000);
+
+    $('#jobs').on('jenky:progress', '.progress', function(event) {
+        var progress = $(this);
+        var main = progress.prev();
+        progress.css({
+            display: 'block',
+            position: 'absolute',
+            top: main.position().top + 'px',
+            width: '20%'
+        });
+    });
 });

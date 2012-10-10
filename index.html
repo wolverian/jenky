@@ -41,16 +41,14 @@
         <script src="js/main.js"></script>
 
         <script type="text/template" id="job-template">
-            <li>
-                <h2 class="<%= color %>"><%= displayName %></h2>
-                <% if (status === "inProgress") { %>
-                    <p><%= progress %> / <%= duration %></p>
-                <% } else { %>
-                    <% if (failed) { %>
-                        <%= failed %> / <%= total %>
-                    <% } %>
+            <h2><%= displayName %></h2>
+            <% if (status === "inProgress") { %>
+                <h2 class="progress <%= color %>"><%= displayName %></h2>
+            <% } else { %>
+                <% if (typeof failed !== "undefined") { %>
+                    <%= failed %> / <%= total %>
                 <% } %>
-            </li>
+            <% } %>
         </script>
     </body>
 </html>

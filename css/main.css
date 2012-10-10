@@ -108,9 +108,10 @@ h2 {
     margin-bottom: 60px;
 }
 
-h2 + progress {
-    margin-top: -60px;
-    margin-bottom: 60px;
+h2 + h2.progress {
+    display: none;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .blue {
