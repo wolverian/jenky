@@ -4,54 +4,6 @@ $(function() {
 // TODO: remove progress bar and integrate progress into text color (sliding from left to right)
 // TODO: show test count, maybe as an exponent to the job names?
 
-    function Jenkins(url) {
-        this.base = url;
-    }
-
-    Jenkins.prototype.jobs = function() {
-        var deferred = $.Deferred();
-
-        $.ajax({
-            url: this.url(''),
-            dataType: 'jsonp',
-            jsonp: 'jsonp'
-        }).then(function(data) {
-                deferred.resolve(data.jobs);
-            }, this);
-
-        return deferred.promise();
-    };
-
-    Jenkins.prototype.duration = function(name) {
-        var deferred = $.Deferred();
-
-        $.ajax({
-            url: this.url('job/' + name),
-            dataType: 'jsonp',
-            jsonp: 'jsonp'
-        }).then(_.bind(function(job) {
-            $.ajax({
-                url: job.lastBuild.url + '/api/json',
-                dataType: 'jsonp',
-                jsonp: 'jsonp'
-            }).then(_.bind(function(build) {
-                var progress = build.duration;
-                var estimate = build.estimatedDuration;
-
-                deferred.resolve({
-                    progress: progress,
-                    estimate: estimate
-                });
-            }, this));
-        }, this));
-
-        return deferred.promise();
-    };
-
-    Jenkins.prototype.url = function(path) {
-        return this.base + '/' + path + '/api/json';
-    };
-
     var Job = Backbone.Model.extend({
         idAttribute: 'name',
         initialize: function() {
@@ -145,8 +97,6 @@ $(function() {
             Todos.each(this.addOne);
         }
     });
-
-    var jenkins = new Jenkins('http://deveo.office.eficode.fi:8080');
 
     var App = window.App = new AppView();
 });
