@@ -1,7 +1,7 @@
 $(function() {
 // TODO: periodic update
 // TODO: update view elements in-place instead of removing and appending them again
-// TODO: progress bar
+// TODO: remove progress bar and integrate progress into text color (sliding from left to right)
 // TODO: test count
 
     function Jenkins(url) {
