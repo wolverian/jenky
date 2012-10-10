@@ -12,9 +12,9 @@ $(function() {
         var deferred = $.Deferred();
 
         $.ajax({
-            url:      this.url(''),
+            url: this.url(''),
             dataType: 'jsonp',
-            jsonp:    'jsonp'
+            jsonp: 'jsonp'
         }).then(function(data) {
                 deferred.resolve(data.jobs);
             }, this);
@@ -26,14 +26,14 @@ $(function() {
         var deferred = $.Deferred();
 
         $.ajax({
-            url:      this.url('job/' + name),
+            url: this.url('job/' + name),
             dataType: 'jsonp',
-            jsonp:    'jsonp'
+            jsonp: 'jsonp'
         }).then(_.bind(function(job) {
             $.ajax({
-                url:      job.lastBuild.url + '/api/json',
+                url: job.lastBuild.url + '/api/json',
                 dataType: 'jsonp',
-                jsonp:    'jsonp'
+                jsonp: 'jsonp'
             }).then(_.bind(function(build) {
                 var progress = build.duration;
                 var estimate = build.estimatedDuration;
@@ -114,34 +114,34 @@ $(function() {
     var Jobs = new JobsList();
 
     var JobView = Backbone.View.extend({
-        tagName:    "li",
-        template:   _.template($('#job-template').html()),
+        tagName: "li",
+        template: _.template($('#job-template').html()),
         initialize: function() {
             this.model.bind('change', this.render, this);
             this.model.bind('destroy', this.remove, this);
         },
-        render:     function() {
+        render: function() {
             this.$el.html(this.template(this.model.toJSON()));
             return this;
         }
     });
 
     var AppView = Backbone.View.extend({
-        el:         $('#jobs'),
+        el: $('#jobs'),
         initialize: function() {
             Jobs.bind('add', this.addOne, this);
             Jobs.bind('reset', this.addAll, this);
             Jobs.bind('all', this.render, this);
             Jobs.fetch();
         },
-        render:     function() {
+        render: function() {
         },
-        addOne:     function(job) {
+        addOne: function(job) {
             console.log('view.addOne');
             var view = new JobView({model: job});
             this.$el.append(view.render().el);
         },
-        addAll:     function() {
+        addAll: function() {
             Todos.each(this.addOne);
         }
     });
