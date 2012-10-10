@@ -20,8 +20,6 @@ $(function() {
                 dataType: 'jsonp',
                 jsonp: 'jsonp'
             }).then(_.bind(function(response) {
-                console.log('updating myself', response);
-
                 this.set({
                     progress: response.duration,
                     duration: response.estimatedDuration
@@ -55,15 +53,17 @@ $(function() {
                 }).then(_.bind(function(data) {
                     var jobs = this.parse(data);
 
-                    _.each(jobs, function(job) {
-                        model.add(job);
-                    }, this);
+                    this.reset(jobs);
                 }, this));
             }
         }
     });
 
     var Jobs = new JobsList();
+
+    Jobs.bind('all', function(name) {
+        console.log("event: " + name);
+    });
 
     var JobView = Backbone.View.extend({
         tagName: "li",
@@ -89,14 +89,21 @@ $(function() {
         render: function() {
         },
         addOne: function(job) {
-            console.log('view.addOne');
             var view = new JobView({model: job});
             this.$el.append(view.render().el);
         },
         addAll: function() {
-            Todos.each(this.addOne);
+            this.$el.empty();
+            Jobs.each(_.bind(this.addOne, this));
+        },
+        update: function() {
+            Jobs.fetch();
         }
     });
 
     var App = window.App = new AppView();
+
+    window.setInterval(function() {
+        App.update();
+    }, 5000);
 });
