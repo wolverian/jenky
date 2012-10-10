@@ -1,4 +1,5 @@
 $(function() {
+// TODO: periodic update
 // TODO: update view elements in-place instead of removing and appending them again
 // TODO: progress bar
 // TODO: test count

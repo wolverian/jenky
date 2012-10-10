@@ -93,14 +93,8 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-@font-face {
-    font-family: "Titillium";
-    src: url(../fonts/TitilliumMaps29L.otf);
-}
-
 body {
-    font-family: Titillium, "Helvetica Neue", sans-serif;
-    font-weight: 300;
+    font-family: "Lucida Grande", "Segoe UI", sans-serif;
     padding: 50px;
 }
 
@@ -127,6 +121,10 @@ h2 + progress {
 
 .red {
     color: #ff4500;
+}
+
+.red_anime {
+    color: #9370db;
 }
 
 .grey {
