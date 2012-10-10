@@ -94,7 +94,7 @@ textarea {
    ========================================================================== */
 
 body {
-    font-family: "Lucida Grande", "Segoe UI", sans-serif;
+    font-family: "freight-sans-pro", "Lucida Grande", "Segoe UI", sans-serif;
     padding: 50px;
 }
 
@@ -104,12 +104,13 @@ h1, h2, h3, h4, h5, h6 {
 
 h2 {
     margin-top: 0;
-    font-size: 100px;
+    font-size: 120px;
+    margin-bottom: 60px;
 }
 
 h2 + progress {
-    margin-top: -83px;
-    margin-bottom: 83px;
+    margin-top: -60px;
+    margin-bottom: 60px;
 }
 
 .blue {
@@ -131,6 +132,10 @@ h2 + progress {
     color: #a9a9a9;
 }
 
+.aborted_anime {
+    color: #00bfff;
+}
+
 ul {
     list-style: none;
     padding-left: 0;
@@ -148,12 +153,9 @@ progress::-webkit-progress-bar {
     background: #eee;
 }
 
-
-
-
-
-
-
+footer {
+    color: #708090;
+}
 
 
 

@@ -13,6 +13,9 @@
 
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
+        <script type="text/javascript" src="//use.typekit.net/xif5mqy.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
         <script src="js/vendor/modernizr-2.6.1.min.js"></script>
@@ -22,15 +25,15 @@
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
 
+        <footer>
+            <p>
+                Development mode. Refreshes page every 10 seconds. <a href="https://emea.deveo.com/client/repobrowser_v1/repositories/luotsi/repositories/jenky/">Get the code!</a>
+            </p>
+        </footer>
+
         <ul id="jobs">
 
         </ul>
-
-        <footer>
-            <p>
-                Development mode. Refreshes page every 10 seconds.
-            </p>
-        </footer>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
         <script src="js/vendor/underscore-1.4.2.js"></script>
@@ -40,7 +43,7 @@
 
         <script type="text/template" id="job-template">
             <li>
-                <h2 class="<%= color %>"><%= name %></h2>
+                <h2 class="<%= color %>"><%= displayName %></h2>
                 <% if (duration) { %>
                     <progress max="<%= duration %>" value="<%= progress %>">
                         <%= progress %> / <%= duration %>

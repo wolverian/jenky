@@ -57,6 +57,10 @@ $(function() {
         initialize: function() {
             if (this.get('color') === "blue_anime")
                 this.fetchProgress();
+            this.set('displayName', this.displayName());
+            this.on('change:name', _.bind(function() {
+                this.set('displayName', this.displayName());
+            }, this));
         },
         fetchProgress: function() {
             $.ajax({
@@ -71,6 +75,9 @@ $(function() {
                     duration: response.estimatedDuration
                 });
             }, this));
+        },
+        displayName: function() {
+            return this.get('name').replace(/_/g, ' ');
         }
     });
 
