@@ -106,6 +106,21 @@ $(function() {
         App.update();
     }, 10000);
 
+    var latest = {};
+    $.each(['index.html', 'css/main.css', 'js/main.js'], function(i, file) {
+        window.setInterval(function() {
+            var jqXHR = $.get(file, function() {
+                var modified = jqXHR.getResponseHeader('Last-Modified');
+
+                if (typeof latest[file] !== 'undefined' && modified !== latest[file]) {
+                    location.reload();
+                }
+
+                latest[file] = modified;
+            }, 'text');
+        }, 5000);
+    });
+
     $('#jobs').on('jenky:progress', '.progress', function(event) {
         var progress = $(this);
         var main = progress.prev();
