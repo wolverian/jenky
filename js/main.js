@@ -106,20 +106,22 @@ $(function() {
         App.update();
     }, 10000);
 
-    var latest = {};
-    $.each(['index.html', 'css/main.css', 'js/main.js'], function(i, file) {
-        window.setInterval(function() {
-            var jqXHR = $.get(file, function() {
+    var lastModified = {};
+
+    window.setInterval(function() {
+        _.each(['index.html', 'css/main.css', 'js/main.js'], function(file) {
+            $.get(file, function(data, status, jqXHR) {
                 var modified = jqXHR.getResponseHeader('Last-Modified');
 
-                if (typeof latest[file] !== 'undefined' && modified !== latest[file]) {
-                    location.reload();
-                }
+                var last = lastModified[file];
 
-                latest[file] = modified;
+                if (!_.isUndefined(last) && modified !== last)
+                    location.reload();
+
+                lastModified[file] = modified;
             }, 'text');
-        }, 5000);
-    });
+        });
+    }, 5000);
 
     $('#jobs').on('jenky:progress', '.progress', function(event) {
         var progress = $(this);
