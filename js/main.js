@@ -101,9 +101,9 @@ $(function() {
 
     var App = window.App = new AppView();
 
-//    window.setInterval(function() {
-//        App.update();
-//    }, 10000);
+    window.setInterval(function() {
+        App.update();
+    }, 10000);
 
     $('#jobs').on('jenky:progress', '.progress', function(event) {
         var progress = $(this);
