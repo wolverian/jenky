@@ -2,6 +2,7 @@ $(function() {
 // TODO: update view elements in-place instead of removing and appending them again
 // TODO: remove progress bar and integrate progress into text color (sliding from left to right)
 // TODO: show test count, maybe as an exponent to the job names?
+// TODO: save the last completed status of a build and use that color under the progress color instead of black, i.e. a build that failed last time will show purple over red
 
     var Job = Backbone.Model.extend({
         idAttribute: 'name',
