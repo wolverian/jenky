@@ -30,7 +30,7 @@ $(function() {
 
     var JobsList = Backbone.Collection.extend({
         model: Job,
-        url: 'http://deveo.office.eficode.fi:8080/api/json',
+        url: window.jenky.conf.jenkins.url + '/api/json',
         parse: function(response) {
             return _.map(response.jobs, function(job) {
                 return {
@@ -72,7 +72,7 @@ $(function() {
         }
     });
 
-    var AppView = Backbone.View.extend({
+    var JenkyView = Backbone.View.extend({
         el: $('#jobs'),
         initialize: function() {
             Jobs.bind('add', this.addOne, this);
@@ -95,11 +95,11 @@ $(function() {
         }
     });
 
-    var App = window.App = new AppView();
+    var app = window.jenky.app = new JenkyView();
 
     window.setInterval(function() {
-        App.update();
-    }, 10000);
+        app.update();
+    }, jenky.conf.jenkins.updateInterval);
 
     var lastModified = {};
 
@@ -116,7 +116,7 @@ $(function() {
                 lastModified[file] = modified;
             }, 'text');
         });
-    }, 5000);
+    }, jenky.conf.jenky.updateInterval);
 
     $('#jobs').on('jenky:progress', '.progress', function(event) {
         var progress = $(this);
