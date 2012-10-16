@@ -4,16 +4,19 @@ $(function() {
         initialize: function() {
             this.fetchBuildInformation();
             this.set('displayName', this.displayName());
-            this.on('change:name', _.bind(function() {
+            this.on('change:name', function() {
                 this.set('displayName', this.displayName());
-            }, this));
+            }, this);
         },
         fetchBuildInformation: function() {
             $.ajax({
                 url: this.get('url') + '/lastBuild/api/json',
                 dataType: 'jsonp',
                 jsonp: 'jsonp'
-            }).then(_.bind(function(response) {
+            }).always(_.bind(function() {
+                this.set('informationFetched', true);
+            }, this))
+            .done(_.bind(function(response) {
                 this.set({
                     status: response.result ? 'done' : 'inProgress',
                     progress: response.duration,
@@ -25,6 +28,9 @@ $(function() {
         },
         displayName: function() {
             return this.get('name').replace(/_/g, ' ');
+        },
+        isBuilding: function() {
+            return this.get('progress') && !this.get('result');
         }
     });
 
@@ -50,7 +56,14 @@ $(function() {
                 }).then(_.bind(function(data) {
                     var jobs = this.parse(data);
 
-                    this.reset(jobs);
+                    _.forEach(jobs, function(job) {
+                        var existingJob = this.get(job.name);
+                        if (existingJob) {
+                            existingJob.set(job);
+                        } else {
+                            this.add(job);
+                        }
+                    }, this);
                 }, this));
             }
         }
@@ -64,11 +77,32 @@ $(function() {
         initialize: function() {
             this.model.bind('change', this.render, this);
             this.model.bind('destroy', this.remove, this);
+            this.model.bind('informationFetched', function() {
+            }, this);
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
-            this.$el.find('.progress').trigger('jenky:progress');
+            if (this.model.get('informationFetched')) {
+                console.log('informationFetched', this.model.get('name'));
+                this.maybeShowProgress();
+                this.$el.show();
+            }
             return this;
+        },
+        maybeShowProgress: function() {
+            var progress = this.$el.find('.progress');
+
+            if (progress.length === 0)
+                return;
+
+            var main = progress.prev();
+
+            progress.css({
+                display: 'block',
+                position: 'absolute',
+                top: main.position().top + 'px',
+                width: '20%'
+            });
         }
     });
 
@@ -117,15 +151,4 @@ $(function() {
             }, 'text');
         });
     }, jenky.conf.jenky.updateInterval);
-
-    $('#jobs').on('jenky:progress', '.progress', function(event) {
-        var progress = $(this);
-        var main = progress.prev();
-        progress.css({
-            display: 'block',
-            position: 'absolute',
-            top: main.position().top + 'px',
-            width: '20%'
-        });
-    });
 });

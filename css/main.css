@@ -98,11 +98,18 @@ body {
     padding: 50px;
 }
 
-#jobs {
-    columns: 2;
-    -webkit-columns: 2;
-    -moz-columns: 2;
+#jobs li {
+    display: none;
 }
+
+@media only screen and (min-width: 1200px) {
+    #jobs {
+        columns: 2;
+        -webkit-columns: 2;
+        -moz-columns: 2;
+    }
+}
+
 
 h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
@@ -110,7 +117,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h2 {
     margin-top: 0;
-    font-size: 120px;
+    font-size: 100px;
     margin-bottom: 60px;
 }
 
