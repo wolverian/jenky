@@ -69,7 +69,7 @@ $(function() {
         }
     });
 
-    var Jobs = new JobsList();
+    var jobs = new JobsList();
 
     var JobView = Backbone.View.extend({
         tagName: "li",
@@ -109,10 +109,10 @@ $(function() {
     var JenkyView = Backbone.View.extend({
         el: $('#jobs'),
         initialize: function() {
-            Jobs.bind('add', this.addOne, this);
-            Jobs.bind('reset', this.addAll, this);
-            Jobs.bind('all', this.render, this);
-            Jobs.fetch();
+            jobs.bind('add', this.addOne, this);
+            jobs.bind('reset', this.addAll, this);
+            jobs.bind('all', this.render, this);
+            jobs.fetch();
         },
         render: function() {
         },
@@ -122,10 +122,10 @@ $(function() {
         },
         addAll: function() {
             this.$el.empty();
-            Jobs.each(_.bind(this.addOne, this));
+            jobs.each(_.bind(this.addOne, this));
         },
         update: function() {
-            Jobs.fetch();
+            jobs.fetch();
         }
     });
 
