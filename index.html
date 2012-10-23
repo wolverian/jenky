@@ -43,7 +43,7 @@
         <script src="js/main.js"></script>
 
         <script type="text/template" id="job-template">
-            <% if (status === "inProgress") { %>
+            <% if (building) { %>
                 <h2><%= displayName %></h2>
                 <h2 class="progress <%= color %>"><%= displayName %></h2>
             <% } else { %>

@@ -98,10 +98,6 @@ body {
     padding: 50px;
 }
 
-#jobs li {
-    display: none;
-}
-
 @media only screen and (min-width: 1200px) {
     #jobs {
         columns: 2;
@@ -119,6 +115,7 @@ h2 {
     margin-top: 0;
     font-size: 100px;
     margin-bottom: 60px;
+    display: inline;
 }
 
 h2 + h2.progress {

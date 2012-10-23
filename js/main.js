@@ -2,35 +2,20 @@ $(function() {
     var Job = Backbone.Model.extend({
         idAttribute: 'name',
         initialize: function() {
-            this.fetchBuildInformation();
             this.set('displayName', this.displayName());
             this.on('change:name', function() {
                 this.set('displayName', this.displayName());
             }, this);
-        },
-        fetchBuildInformation: function() {
-            $.ajax({
-                url: this.get('url') + '/lastBuild/api/json',
-                dataType: 'jsonp',
-                jsonp: 'jsonp'
-            }).always(_.bind(function() {
-                this.set('informationFetched', true);
-            }, this))
-            .done(_.bind(function(response) {
-                this.set({
-                    status: response.result ? 'done' : 'inProgress',
-                    progress: response.duration,
-                    duration: response.estimatedDuration,
-                    result: response.result,
-                    failed: response.failed
-                });
-            }, this));
+            this.set('realDuration', this.realDuration());
         },
         displayName: function() {
             return this.get('name').replace(/_/g, ' ');
         },
         isBuilding: function() {
             return this.get('progress') && !this.get('result');
+        },
+        realDuration: function() {
+            return Date.now() - this.get('timestamp');
         }
     });
 
@@ -42,7 +27,6 @@ $(function() {
                 return {
                     name: job.name,
                     color: job.color,
-                    duration: job.duration,
                     url: job.url
                 };
             }, this);
@@ -56,12 +40,24 @@ $(function() {
                 }).then(_.bind(function(data) {
                     var jobs = this.parse(data);
 
-                    _.forEach(jobs, function(job) {
-                        var existingJob = this.get(job.name);
-                        if (existingJob) {
-                            existingJob.set(job);
-                        } else {
+                    return $.when.apply(window, _.map(jobs, function(job) {
+                        return $.ajax({
+                            url: job.url + '/lastBuild/api/json',
+                            dataType: 'jsonp',
+                            jsonp: 'jsonp'
+                        }).then(function(details) {
+                            return _.extend({}, job, details);
+                        });
+                    }, this));
+                }, this)).then(_.bind(function() {
+                    _.forEach(arguments, function(job) {
+                        var name = job.name;
+                        var existing = this.get(name);
+
+                        if (_.isUndefined(existing)) {
                             this.add(job);
+                        } else {
+                            existing.set(job);
                         }
                     }, this);
                 }, this));
@@ -77,31 +73,38 @@ $(function() {
         initialize: function() {
             this.model.bind('change', this.render, this);
             this.model.bind('destroy', this.remove, this);
-            this.model.bind('informationFetched', function() {
-            }, this);
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
-            if (this.model.get('informationFetched')) {
-                console.log('informationFetched', this.model.get('name'));
-                this.maybeShowProgress();
-                this.$el.show();
-            }
+            this.showProgress();
             return this;
         },
-        maybeShowProgress: function() {
-            var progress = this.$el.find('.progress');
+        showProgress: function() {
+            var progressElement = this.$el.find('.progress');
 
-            if (progress.length === 0)
+            if (progressElement.length === 0)
                 return;
 
-            var main = progress.prev();
+            var main = progressElement.prev();
 
-            progress.css({
+            var mainWidth = main.width();
+            var progress = this.model.get('realDuration');
+            var duration = this.model.get('estimatedDuration');
+            var p = (progress / duration) * 100;
+
+            console.log(progressElement.text(), {
+                mainWidth: mainWidth,
+                progress: progress,
+                duration: duration,
+                p: p,
+                main: main
+            });
+
+            progressElement.css({
                 display: 'block',
-                position: 'absolute',
-                top: main.position().top + 'px',
-                width: '20%'
+//                position: 'absolute',
+//                top: main.position().top + 'px',
+                width: '' + p + '%'
             });
         }
     });
