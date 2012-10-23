@@ -49,13 +49,13 @@ $(function() {
                             dataType: 'jsonp',
                             jsonp: 'jsonp'
                         }).then(function(details) {
-                            if (job.name === "frontend_test") {
-                                console.log('injecting');
-                                details.duration = 0;
-                                details.building = true;
-                                details.estimatedDuration = 300;
-                                details.timestamp = Date.now() - 50;
-                            }
+//                            if (job.name === "frontend_test") {
+//                                console.log('injecting');
+//                                details.duration = 0;
+//                                details.building = true;
+//                                details.estimatedDuration = 300;
+//                                details.timestamp = Date.now() - 50;
+//                            }
                             return _.extend({}, job, details);
                         });
                     }, this));
