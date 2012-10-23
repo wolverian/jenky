@@ -7,6 +7,9 @@ $(function() {
                 this.set('displayName', this.displayName());
             }, this);
             this.set('realDuration', this.realDuration());
+            this.on('change:duration', function() {
+                this.set('realDuration', this.realDuration());
+            }, this);
         },
         displayName: function() {
             return this.get('name').replace(/_/g, ' ');
@@ -46,6 +49,13 @@ $(function() {
                             dataType: 'jsonp',
                             jsonp: 'jsonp'
                         }).then(function(details) {
+                            if (job.name === "frontend_test") {
+                                console.log('injecting');
+                                details.duration = 0;
+                                details.building = true;
+                                details.estimatedDuration = 300;
+                                details.timestamp = Date.now() - 50;
+                            }
                             return _.extend({}, job, details);
                         });
                     }, this));
@@ -71,8 +81,8 @@ $(function() {
         tagName: "li",
         template: _.template($('#job-template').html()),
         initialize: function() {
-            this.model.bind('change', this.render, this);
-            this.model.bind('destroy', this.remove, this);
+            this.model.on('change', this.render, this);
+            this.model.on('destroy', this.remove, this);
         },
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
@@ -90,21 +100,23 @@ $(function() {
             var mainWidth = main.width();
             var progress = this.model.get('realDuration');
             var duration = this.model.get('estimatedDuration');
-            var p = (progress / duration) * 100;
+            var p = progress / duration;
 
             console.log(progressElement.text(), {
                 mainWidth: mainWidth,
                 progress: progress,
                 duration: duration,
                 p: p,
-                main: main
+                timestamp: this.model.get('realDuration'),
+                position: main.position()
             });
 
             progressElement.css({
                 display: 'block',
-//                position: 'absolute',
-//                top: main.position().top + 'px',
-                width: '' + p + '%'
+                position: 'absolute',
+                top: main.position().top - 4 /* why - 4? */  + 'px',
+                left: main.position().left,
+                width: '' + (p * main.width()) + 'px'
             });
         }
     });
@@ -115,13 +127,14 @@ $(function() {
             jobs.bind('add', this.addOne, this);
             jobs.bind('reset', this.addAll, this);
             jobs.bind('all', this.render, this);
-            jobs.fetch();
         },
         render: function() {
         },
         addOne: function(job) {
             var view = new JobView({model: job});
-            $(view.render().el).appendTo(this.$el);
+            view.$el.appendTo(this.$el);
+            view.render();
+//            view.render().$el.appendTo(this.$el);
         },
         addAll: function() {
             this.$el.empty();
@@ -134,24 +147,26 @@ $(function() {
 
     var app = window.jenky.app = new JenkyView();
 
+    app.update();
+
     window.setInterval(function() {
         app.update();
     }, jenky.conf.jenkins.updateInterval);
 
     var lastModified = {};
 
-    window.setInterval(function() {
-        _.each(['index.html', 'css/main.css', 'js/main.js'], function(file) {
-            $.get(file, function(data, status, jqXHR) {
-                var modified = jqXHR.getResponseHeader('Last-Modified');
-
-                var last = lastModified[file];
-
-                if (!_.isUndefined(last) && modified !== last)
-                    location.reload();
-
-                lastModified[file] = modified;
-            }, 'text');
-        });
-    }, jenky.conf.jenky.updateInterval);
+//    window.setInterval(function() {
+//        _.each(['index.html', 'css/main.css', 'js/main.js'], function(file) {
+//            $.get(file, function(data, status, jqXHR) {
+//                var modified = jqXHR.getResponseHeader('Last-Modified');
+//
+//                var last = lastModified[file];
+//
+//                if (!_.isUndefined(last) && modified !== last)
+//                    location.reload();
+//
+//                lastModified[file] = modified;
+//            }, 'text');
+//        });
+//    }, jenky.conf.jenky.updateInterval);
 });

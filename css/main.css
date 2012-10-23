@@ -93,9 +93,14 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: "freight-sans-pro", "Lucida Grande", "Segoe UI", sans-serif;
     padding: 50px;
+    overflow: hidden;
 }
 
 @media only screen and (min-width: 1200px) {
@@ -111,15 +116,14 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
 }
 
-h2 {
+li {
     margin-top: 0;
-    font-size: 100px;
     margin-bottom: 60px;
-    display: inline;
 }
 
-h2 + h2.progress {
-    display: none;
+h2 {
+    font-size: 100px;
+    display: inline;
     overflow: hidden;
     white-space: nowrap;
 }
