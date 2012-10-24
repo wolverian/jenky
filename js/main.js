@@ -152,7 +152,7 @@ $(function() {
 
     var app = window.jenky.app = new JenkyView();
 
-    $(body).css({
+    $('body').css({
         'font-family': window.jenky.conf.jenky.font
     });
 
