@@ -108,6 +108,7 @@ $(function() {
             jobs.on('add', this.addOne, this);
             jobs.on('reset', this.addAll, this);
             jobs.on('all', this.render, this);
+            $(window).resize(_.throttle(_.bind(this.render, this), 200));
         },
         render: function() {
             var windowHeight = $(window).height();

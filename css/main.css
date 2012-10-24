@@ -101,7 +101,7 @@ body {
     font-family: "freight-sans-pro", "Lucida Grande", "Segoe UI", sans-serif;
 }
 
-@media only screen and (min-width: 1500px) {
+@media only screen and (min-width: 1700px) {
     body {
         overflow: hidden;
         height: 100%;
