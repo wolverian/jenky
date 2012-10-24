@@ -102,15 +102,6 @@ $(function() {
             var duration = this.model.get('estimatedDuration');
             var p = progress / duration;
 
-            console.log(progressElement.text(), {
-                mainWidth: mainWidth,
-                progress: progress,
-                duration: duration,
-                p: p,
-                timestamp: this.model.get('realDuration'),
-                position: main.position()
-            });
-
             progressElement.css({
                 display: 'block',
                 position: 'absolute',
@@ -124,9 +115,9 @@ $(function() {
     var JenkyView = Backbone.View.extend({
         el: $('#jobs'),
         initialize: function() {
-            jobs.bind('add', this.addOne, this);
-            jobs.bind('reset', this.addAll, this);
-            jobs.bind('all', this.render, this);
+            jobs.on('add', this.addOne, this);
+            jobs.on('reset', this.addAll, this);
+            jobs.on('all', this.render, this);
         },
         render: function() {
         },
@@ -134,7 +125,6 @@ $(function() {
             var view = new JobView({model: job});
             view.$el.appendTo(this.$el);
             view.render();
-//            view.render().$el.appendTo(this.$el);
         },
         addAll: function() {
             this.$el.empty();
@@ -153,8 +143,8 @@ $(function() {
         app.update();
     }, jenky.conf.jenkins.updateInterval);
 
-    var lastModified = {};
-
+//    var lastModified = {};
+//
 //    window.setInterval(function() {
 //        _.each(['index.html', 'css/main.css', 'js/main.js'], function(file) {
 //            $.get(file, function(data, status, jqXHR) {
