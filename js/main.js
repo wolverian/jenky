@@ -6,10 +6,6 @@ $(function() {
             this.on('change:name', function() {
                 this.set('displayName', this.displayName());
             }, this);
-            this.set('realDuration', this.realDuration());
-            this.on('change:duration', function() {
-                this.set('realDuration', this.realDuration());
-            }, this);
         },
         displayName: function() {
             return this.get('name').replace(/_/g, ' ');
@@ -81,6 +77,7 @@ $(function() {
         render: function() {
             this.$el.html(this.template(this.model.toJSON()));
             this.showProgress();
+            var h2 = this.$el.find('.progress');
             return this;
         },
         showProgress: function() {
@@ -92,12 +89,12 @@ $(function() {
             var main = progressElement.prev();
 
             var mainWidth = main.width();
-            var progress = this.model.get('realDuration');
+            var progress = this.model.realDuration();
             var duration = this.model.get('estimatedDuration');
             var p = progress / duration;
 
             progressElement.css({
-                width: '' + (p * main.width()) + 'px'
+                width: '' + Math.round(p * main.width()) + 'px'
             });
         }
     });
