@@ -53,7 +53,7 @@ case Freight Sans Pro is not available. You can also change the value of the
 `font` key in Jenky's configuration file. This value can be any valid CSS
 `font-family` value.
 
-The important part in choosing a font for Jenky is to view the font on an
+The important part in choosing a typeface for Jenky is to view the font on an
 actual radiator screen, where Jenky will actually be used.  Fonts look very
 different on a 13-inch laptop screen and a 50-inch TV.
 
