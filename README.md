@@ -8,7 +8,7 @@ Jenky is a beautiful radiator for your Jenkins CI server.
 
 ## Development
 
-Jenky is currently at a 0.1 release. It is usable but not robust.
+Jenky is currently in alpha. It is usable but not robust.
 
 ## Authors
 
