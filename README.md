@@ -12,6 +12,6 @@ Jenky is currently in alpha. It is usable but not robust.
 
 ## Authors
 
-- [wolverian](/wolverian)
-- [vluoto](/vluoto)
-- [anttieov](/anttieov)
+- [wolverian](https://github.com/wolverian)
+- [vluoto](https://github.com/vluoto)
+- [anttieov](https://github.com/anttieov)
