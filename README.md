@@ -2,7 +2,7 @@
 
 Jenky is a beautiful radiator for your Jenkins CI server.
 
-![Example screenshot](img/screenshot.png)
+![Example screenshot](https://raw.github.com/Eficode/jenky/master/img/screenshot.png)
 
 ## Deployment
 
