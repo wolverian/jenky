@@ -157,21 +157,4 @@ $(function() {
     window.setInterval(function() {
         app.update();
     }, jenky.conf.jenkins.updateInterval);
-
-//    var lastModified = {};
-//
-//    window.setInterval(function() {
-//        _.each(['index.html', 'css/main.css', 'js/main.js'], function(file) {
-//            $.get(file, function(data, status, jqXHR) {
-//                var modified = jqXHR.getResponseHeader('Last-Modified');
-//
-//                var last = lastModified[file];
-//
-//                if (!_.isUndefined(last) && modified !== last)
-//                    location.reload();
-//
-//                lastModified[file] = modified;
-//            }, 'text');
-//        });
-//    }, jenky.conf.jenky.updateInterval);
 });
