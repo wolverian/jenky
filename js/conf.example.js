@@ -7,7 +7,8 @@
             updateInterval: 5 * seconds
         },
         jenky: {
-            updateInterval: 10 * seconds
+            updateInterval: 10 * seconds,
+            typekitKitId: "your typekit kit ID"
         }
     };
 }(window));

@@ -1,5 +1,9 @@
 # Jenky
 
-See [Jenky's basecamp](https://basecamp.com/1972163/projects/1288709-jenky).
+Jenky is a beautiful radiator for your Jenkins CI server.
 
-Sketch: http://cl.ly/0s0G1R1W0l02
+![Example screenshot](img/screenshot.png)
+
+## Installation
+
+## Authors

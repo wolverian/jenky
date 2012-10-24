@@ -93,6 +93,10 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+.wf-loading { visibility: hidden; }
+.wf-inactive { visibility: visible; }
+.wf-active { visibility: visible; }
+
 * {
     box-sizing: border-box;
 }
