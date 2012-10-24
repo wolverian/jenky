@@ -105,7 +105,7 @@ $(function() {
             progressElement.css({
                 display: 'block',
                 position: 'absolute',
-                top: main.position().top - 4 /* why - 4? */  + 'px',
+                top: main.position().top + 'px',
                 left: main.position().left,
                 width: '' + (p * main.width()) + 'px'
             });
