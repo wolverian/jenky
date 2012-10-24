@@ -155,6 +155,6 @@ $(function() {
     app.update();
 
     window.setInterval(function() {
-//        app.update();
+        app.update();
     }, jenky.conf.jenkins.updateInterval);
 });
