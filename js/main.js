@@ -49,13 +49,6 @@ $(function() {
                             dataType: 'jsonp',
                             jsonp: 'jsonp'
                         }).then(function(details) {
-//                            if (job.name === "frontend_test") {
-//                                console.log('injecting');
-//                                details.duration = 0;
-//                                details.building = true;
-//                                details.estimatedDuration = 300;
-//                                details.timestamp = Date.now() - 50;
-//                            }
                             return _.extend({}, job, details);
                         });
                     }, this));
@@ -68,6 +61,7 @@ $(function() {
                             this.add(job);
                         } else {
                             existing.set(job);
+                            existing.trigger('change');
                         }
                     }, this);
                 }, this));
@@ -119,16 +113,18 @@ $(function() {
             var windowHeight = $(window).height();
 
             var topMargin = 50;
-            var leftMargin = 50;
+            var leftMargin = 40;
+
+            var containerHeight = windowHeight - topMargin;
 
             this.$el.css({
-                height: windowHeight - topMargin + 'px',
+                height: containerHeight + 'px',
                 top: topMargin + 'px',
                 left: leftMargin + 'px'
             });
 
             var items = this.$el.find('li');
-            var height = Math.floor(windowHeight / Math.ceil(items.length / 2)) + 'px';
+            var height = Math.floor(containerHeight / Math.ceil(items.length / 2)) + 'px';
             items.css('height', height);
         },
         addOne: function(job) {

@@ -142,7 +142,7 @@ li {
 
 h2 {
     font-size: 100px;
-    display: block;
+    display: inline-block;
     white-space: nowrap;
     position: absolute;
     margin: 0;
@@ -152,7 +152,7 @@ h2 {
 }
 
 h2.progress {
-
+    overflow: hidden;
 }
 
 .blue {
