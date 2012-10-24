@@ -8,6 +8,7 @@
         },
         jenky: {
             updateInterval: 10 * seconds,
+            font: 'freight-sans-pro',
             typekitKitId: "your typekit kit ID"
         }
     };

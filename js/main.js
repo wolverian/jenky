@@ -152,6 +152,10 @@ $(function() {
 
     var app = window.jenky.app = new JenkyView();
 
+    $(body).css({
+        'font-family': window.jenky.conf.jenky.font
+    });
+
     app.update();
 
     window.setInterval(function() {
