@@ -157,6 +157,8 @@ h2 {
 
 h2.progress {
     overflow-x: hidden;
+    overflow-y: visible;
+    height: 1.2em;
 }
 
 .blue {

@@ -75,9 +75,12 @@ $(function() {
             this.model.on('destroy', this.remove, this);
         },
         render: function() {
-            this.$el.html(this.template(this.model.toJSON()));
+            var attributes = this.model.toJSON();
+            _.extend(attributes, {
+                previousColor: this.model.previousAttributes.color
+            });
+            this.$el.html(this.template(attributes));
             this.showProgress();
-            var h2 = this.$el.find('.progress');
             return this;
         },
         showProgress: function() {
@@ -122,8 +125,15 @@ $(function() {
             });
 
             var items = this.$el.find('li');
-            var height = Math.floor(containerHeight / Math.ceil(items.length / 2)) + 'px';
-            items.css('height', height);
+            var height = Math.floor(containerHeight / Math.ceil(items.length / 2));
+
+            items.css({
+                height: height
+            });
+
+            items.find('h2').css({
+                'font-size': height * 0.6 - 10
+            });
         },
         addOne: function(job) {
             var view = new JobView({model: job});

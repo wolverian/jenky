@@ -44,14 +44,10 @@
         </script>
 
         <script type="text/template" id="job-template">
+            <h2 class="<%= previousColor %>"><%= displayName %></h2>
+
             <% if (building) { %>
-                <h2><%= displayName %></h2>
                 <h2 class="progress <%= color %>"><%= displayName %></h2>
-            <% } else { %>
-                <h2 class="<%= color %>"><%= displayName %></h2>
-                <% if (typeof failed !== "undefined") { %>
-                    <%= failed %> / <%= total %>
-                <% } %>
             <% } %>
         </script>
     </body>
