@@ -130,10 +130,6 @@ $(function() {
             items.css({
                 height: height
             });
-
-            items.find('h2').css({
-                'font-size': height * 0.6 - 10
-            });
         },
         addOne: function(job) {
             var view = new JobView({model: job});
@@ -159,6 +155,6 @@ $(function() {
     app.update();
 
     window.setInterval(function() {
-        app.update();
+//        app.update();
     }, jenky.conf.jenkins.updateInterval);
 });
