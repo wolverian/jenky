@@ -8,8 +8,8 @@
         },
         jenky: {
             updateInterval: 10 * seconds,
-            font: 'freight-sans-pro',
-            typekitKitId: "your typekit kit ID"
+            font: 'freight-sans-pro, Helvetica, Segoe UI, sans-serif',
+            typekitKitId: null
         }
     };
 }(window));
