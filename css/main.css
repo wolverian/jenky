@@ -99,18 +99,29 @@ textarea {
 
 body {
     font-family: "freight-sans-pro", "Lucida Grande", "Segoe UI", sans-serif;
-    padding: 50px;
 }
 
-@media only screen and (min-width: 1200px) {
+@media only screen and (min-width: 1500px) {
     body {
         overflow: hidden;
+        height: 100%;
     }
 
     #jobs {
+        margin: 0;
+
         columns: 2;
         -webkit-columns: 2;
         -moz-columns: 2;
+
+        column-gap: 0;
+        -moz-column-gap: 0;
+        -webkit-column-gap: 0;
+
+        position: absolute;
+        left: 0;
+        top:0;
+        width: 100%;
     }
 }
 
@@ -119,16 +130,29 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
 }
 
+
 li {
     margin-top: 0;
-    margin-bottom: 60px;
+    margin-bottom: 0;
+    position: relative;
+    display: block;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 h2 {
     font-size: 100px;
-    display: inline;
-    overflow: hidden;
+    display: block;
     white-space: nowrap;
+    position: absolute;
+    margin: 0;
+    top: 0;
+    left: 0;
+    line-height:1em;
+}
+
+h2.progress {
+
 }
 
 .blue {
@@ -155,8 +179,8 @@ h2 {
 }
 
 ul {
+    padding: 0;
     list-style: none;
-    padding-left: 0;
 }
 
 progress {

@@ -103,10 +103,6 @@ $(function() {
             var p = progress / duration;
 
             progressElement.css({
-                display: 'block',
-                position: 'absolute',
-                top: main.position().top + 'px',
-                left: main.position().left,
                 width: '' + (p * main.width()) + 'px'
             });
         }
@@ -120,6 +116,20 @@ $(function() {
             jobs.on('all', this.render, this);
         },
         render: function() {
+            var windowHeight = $(window).height();
+
+            var topMargin = 50;
+            var leftMargin = 50;
+
+            this.$el.css({
+                height: windowHeight - topMargin + 'px',
+                top: topMargin + 'px',
+                left: leftMargin + 'px'
+            });
+
+            var items = this.$el.find('li');
+            var height = Math.floor(windowHeight / Math.ceil(items.length / 2)) + 'px';
+            items.css('height', height);
         },
         addOne: function(job) {
             var view = new JobView({model: job});
@@ -129,6 +139,7 @@ $(function() {
         addAll: function() {
             this.$el.empty();
             jobs.each(_.bind(this.addOne, this));
+
         },
         update: function() {
             jobs.fetch();
