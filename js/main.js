@@ -20,15 +20,10 @@ $(function() {
 
     var JobsList = Backbone.Collection.extend({
         model: Job,
-        url: window.jenky.conf.jenkins.url + '/api/json',
+        url: window.jenky.conf.jenkins.url + '/api/json?depth=2',
         parse: function(response) {
-            return _.map(response.jobs, function(job) {
-                return {
-                    name: job.name,
-                    color: job.color,
-                    url: job.url
-                };
-            }, this);
+            console.log(response);
+            return response.jobs;
         },
         sync: function(method, model, options) {
             if (method === "read") {
@@ -39,17 +34,7 @@ $(function() {
                 }).then(_.bind(function(data) {
                     var jobs = this.parse(data);
 
-                    return $.when.apply(window, _.map(jobs, function(job) {
-                        return $.ajax({
-                            url: job.url + '/lastBuild/api/json',
-                            dataType: 'jsonp',
-                            jsonp: 'jsonp'
-                        }).then(function(details) {
-                            return _.extend({}, job, details);
-                        });
-                    }, this));
-                }, this)).then(_.bind(function() {
-                    _.forEach(arguments, function(job) {
+                    _.forEach(jobs, function(job) {
                         var name = job.name;
                         var existing = this.get(name);
 

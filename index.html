@@ -10,8 +10,6 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
         <link rel="stylesheet" href="css/normalize.css">
         <link rel="stylesheet" href="css/main.css">
         <script src="js/vendor/modernizr-2.6.1.min.js"></script>
@@ -48,7 +46,7 @@
 
         <script type="text/template" id="job-template">
 
-            <% if (building) { %>
+            <% if (lastBuild.building) { %>
                 <h2 class="<%= previousColor %>"><%= displayName %></h2>
                 <h2 class="progress <%= color %>"><%= displayName %></h2>
             <% } else { %>
