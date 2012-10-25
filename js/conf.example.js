@@ -8,7 +8,7 @@
         },
         jenky: {
             updateInterval: 10 * seconds,
-            font: 'freight-sans-pro, Helvetica, Segoe UI, sans-serif',
+            font: 'freight-sans-pro, Ubuntu, Helvetica, Segoe UI, sans-serif',
             typekitKitId: null
         }
     };
