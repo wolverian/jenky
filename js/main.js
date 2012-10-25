@@ -37,6 +37,7 @@ $(function() {
                             this.add(job);
                         } else {
                             existing.set(job);
+                            existing.trigger('change');
                         }
                     }, this);
                 }, this));
@@ -54,6 +55,7 @@ $(function() {
             this.model.on('destroy', this.remove, this);
         },
         render: function() {
+            console.log('rendering', this.model.get('name'));
             var attributes = this.model.toJSON();
             _.extend(attributes, {
                 previousColor: this.model.previousAttributes.color
@@ -117,7 +119,6 @@ $(function() {
         addAll: function() {
             this.$el.empty();
             jobs.each(_.bind(this.addOne, this));
-
         },
         update: function() {
             jobs.fetch();
