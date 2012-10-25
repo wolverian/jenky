@@ -23,7 +23,7 @@ $(function() {
         },
         sync: function(method, model, options) {
             if (method === "read") {
-                $.ajax({
+                return $.ajax({
                     url: this.url,
                     dataType: 'jsonp',
                     jsonp: 'jsonp'
@@ -40,7 +40,7 @@ $(function() {
                             existing.trigger('change');
                         }
                     }, this);
-                }, this));
+                }, this)).promise();
             }
         }
     });
@@ -120,9 +120,10 @@ $(function() {
             this.$el.empty();
             jobs.each(_.bind(this.addOne, this));
         },
-        update: function() {
-            jobs.fetch();
-            _.delay(_.bind(this.update, this), window.jenky.conf.jenkins.updateInterval);
+        update: function(delayed) {
+            jobs.fetch().always(_.bind(function() {
+                delayed(delayed);
+            }, this));
         }
     });
 
@@ -132,5 +133,5 @@ $(function() {
         'font-family': window.jenky.conf.jenky.font
     });
 
-    app.update();
+    app.update(_.debounce(_.bind(app.update, app), window.jenky.conf.jenkins.updateInterval));
 });
