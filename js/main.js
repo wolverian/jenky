@@ -19,7 +19,6 @@ $(function() {
         model: Job,
         url: window.jenky.conf.jenkins.url + '/api/json?tree=jobs[name,color,lastBuild[building,timestamp,estimatedDuration]]',
         parse: function(response) {
-            console.log(response);
             return response.jobs;
         },
         sync: function(method, model, options) {
