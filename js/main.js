@@ -10,17 +10,14 @@ $(function() {
         displayName: function() {
             return this.get('name').replace(/_/g, ' ');
         },
-        isBuilding: function() {
-            return this.get('progress') && !this.get('result');
-        },
         realDuration: function() {
-            return Date.now() - this.get('timestamp');
+            return Date.now() - this.get('lastBuild').timestamp;
         }
     });
 
     var JobsList = Backbone.Collection.extend({
         model: Job,
-        url: window.jenky.conf.jenkins.url + '/api/json?depth=2',
+        url: window.jenky.conf.jenkins.url + '/api/json?tree=jobs[name,color,lastBuild[building,timestamp,estimatedDuration]]',
         parse: function(response) {
             console.log(response);
             return response.jobs;
@@ -35,14 +32,12 @@ $(function() {
                     var jobs = this.parse(data);
 
                     _.forEach(jobs, function(job) {
-                        var name = job.name;
-                        var existing = this.get(name);
+                        var existing = this.get(job.name);
 
                         if (_.isUndefined(existing)) {
                             this.add(job);
                         } else {
                             existing.set(job);
-                            existing.trigger('change');
                         }
                     }, this);
                 }, this));
@@ -50,7 +45,7 @@ $(function() {
         }
     });
 
-    var jobs = new JobsList();
+    var jobs = window.jenky.jobs = new JobsList();
 
     var JobView = Backbone.View.extend({
         tagName: "li",
@@ -76,9 +71,8 @@ $(function() {
 
             var main = progressElement.prev();
 
-            var mainWidth = main.width();
             var progress = this.model.realDuration();
-            var duration = this.model.get('estimatedDuration');
+            var duration = this.model.get('lastBuild').estimatedDuration;
             var p = progress / duration;
 
             progressElement.css({
@@ -128,6 +122,7 @@ $(function() {
         },
         update: function() {
             jobs.fetch();
+            _.delay(_.bind(this.update, this), window.jenky.conf.jenkins.updateInterval);
         }
     });
 
@@ -138,8 +133,4 @@ $(function() {
     });
 
     app.update();
-
-    window.setInterval(function() {
-        app.update();
-    }, jenky.conf.jenkins.updateInterval);
 });
