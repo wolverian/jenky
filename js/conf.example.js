@@ -1,7 +1,7 @@
 (function() {
     var seconds = 1000;
-    window.jenky = {};
-    window.jenky.conf = {
+    window.Jenky = {};
+    window.Jenky.conf = {
         jenkins: {
             url: 'change me',
             updateInterval: 5 * seconds

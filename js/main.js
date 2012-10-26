@@ -1,137 +1,125 @@
 $(function() {
-    var Job = Backbone.Model.extend({
-        idAttribute: 'name',
-        initialize: function() {
-            this.set('displayName', this.displayName());
-            this.on('change:name', function() {
-                this.set('displayName', this.displayName());
-            }, this);
-        },
+    var App = window.App = Em.Application.create();
+
+    var Job = App.Job = DS.Model.extend({
+        name: DS.attr('string'),
+        color: DS.attr('string'),
+        building: DS.attr('boolean'),
+        timestamp: DS.attr('number'),
+        estimatedDuration: DS.attr('number'),
+        duration: function() {
+            return Date.now() - this.get('timestamp');
+        }.property('timestamp'),
         displayName: function() {
             return this.get('name').replace(/_/g, ' ');
+        }.property('name'),
+        primaryKey: 'name',
+        _previousColor: DS.attr('string'),
+        previousColor: function() {
+            if (!this.get('_previousColor'))
+                this.set('_previousColor', this.get('color'));
+
+            return this.get('_previousColor');
+        }.property('color')
+    });
+
+    Job.reopenClass({
+        collectionUrl: '/'
+    });
+
+    var adapter = App.adapter = DS.Adapter.create({
+        baseUrl: window.jenky.conf.jenkins.url,
+        findAll: function(store, type, since) {
+            jQuery.ajax(this.get('baseUrl') + type.collectionUrl + '/api/json?tree=jobs[name,color,lastBuild[id,building,timestamp,estimatedDuration]]', {
+                dataType: 'jsonp',
+                jsonp: 'jsonp',
+                success: _.bind(function(data) {
+                    var jobs = data.jobs;
+                    var parsed = _.map(jobs, this.parse, this);
+                    var ids = _.map(jobs, function(job) { return job.name; });
+                    store.loadMany(type, ids, parsed);
+                }, this)
+            });
         },
-        realDuration: function() {
-            return Date.now() - this.get('lastBuild').timestamp;
+        parse: function(obj) {
+            return {
+                name: obj.name,
+                color: obj.color,
+                id: obj.lastBuild.id,
+                timestamp: obj.lastBuild.timestamp,
+                estimatedDuration: obj.lastBuild.estimatedDuration,
+                building: obj.lastBuild.building
+            };
         }
     });
 
-    var JobsList = Backbone.Collection.extend({
-        model: Job,
-        url: window.jenky.conf.jenkins.url + '/api/json?tree=jobs[name,color,lastBuild[building,timestamp,estimatedDuration]]',
-        parse: function(response) {
-            return response.jobs;
-        },
-        sync: function(method, model, options) {
-            if (method === "read") {
-                return $.ajax({
-                    url: this.url,
-                    dataType: 'jsonp',
-                    jsonp: 'jsonp'
-                }).then(_.bind(function(data) {
-                    var jobs = this.parse(data);
-
-                    _.forEach(jobs, function(job) {
-                        var existing = this.get(job.name);
-
-                        if (_.isUndefined(existing)) {
-                            this.add(job);
-                        } else {
-                            existing.set(job);
-                            existing.trigger('change');
-                        }
-                    }, this);
-                }, this)).promise();
-            }
-        }
+    var store = App.store = DS.Store.create({
+        revision: 6,
+        adapter: adapter
     });
 
-    var jobs = window.jenky.jobs = new JobsList();
-
-    var JobView = Backbone.View.extend({
-        tagName: "li",
-        template: _.template($('#job-template').html()),
-        initialize: function() {
-            this.model.on('change', this.render, this);
-            this.model.on('destroy', this.remove, this);
-        },
-        render: function() {
-            console.log('rendering', this.model.get('name'));
-            var attributes = this.model.toJSON();
-            _.extend(attributes, {
-                previousColor: this.model.previousAttributes.color
-            });
-            this.$el.html(this.template(attributes));
-            this.showProgress();
-            return this;
-        },
-        showProgress: function() {
-            var progressElement = this.$el.find('.progress');
-
-            if (progressElement.length === 0)
-                return;
-
-            var main = progressElement.prev();
-
-            var progress = this.model.realDuration();
-            var duration = this.model.get('lastBuild').estimatedDuration;
-            var p = progress / duration;
-
-            progressElement.css({
-                width: '' + Math.round(p * main.width()) + 'px'
-            });
-        }
-    });
-
-    var JenkyView = Backbone.View.extend({
-        el: $('#jobs'),
-        initialize: function() {
-            jobs.on('add', this.addOne, this);
-            jobs.on('reset', this.addAll, this);
-            jobs.on('all', this.render, this);
-            $(window).resize(_.throttle(_.bind(this.render, this), 200));
-        },
-        render: function() {
-            var windowHeight = $(window).height();
-
-            var topMargin = 50;
-            var leftMargin = 40;
-
-            var containerHeight = windowHeight - topMargin;
-
-            this.$el.css({
-                height: containerHeight + 'px',
-                top: topMargin + 'px',
-                left: leftMargin + 'px'
-            });
-
-            var items = this.$el.find('li');
-            var height = Math.floor(containerHeight / Math.ceil(items.length / 2));
-
-            items.css({
-                height: height
-            });
-        },
-        addOne: function(job) {
-            var view = new JobView({model: job});
-            view.$el.appendTo(this.$el);
-            view.render();
-        },
-        addAll: function() {
-            this.$el.empty();
-            jobs.each(_.bind(this.addOne, this));
-        },
-        update: function(delayed) {
-            jobs.fetch().always(_.bind(function() {
-                delayed(delayed);
-            }, this));
-        }
-    });
-
-    var app = window.jenky.app = new JenkyView();
+    var jobsController = App.jobsController = Ember.ArrayController.create();
 
     $('body').css({
         'font-family': window.jenky.conf.jenky.font
     });
 
-    app.update(_.debounce(_.bind(app.update, app), window.jenky.conf.jenkins.updateInterval));
+    jobsController.set('content', store.findAll(Job));
+
+    function resize() {
+        var jobs = $('ul');
+
+        var windowHeight = $(window).height();
+
+        var topMargin = 50;
+        var leftMargin = 40;
+
+        var containerHeight = windowHeight - topMargin;
+
+        jobs.css({
+            height: containerHeight + 'px',
+            top: topMargin + 'px',
+            left: leftMargin + 'px'
+        });
+
+        var items = jobs.find('li');
+        var height = Math.floor(containerHeight / Math.ceil(items.length / 2));
+
+        items.css({
+            height: height
+        });
+    }
+
+    App.JobsView = Ember.CollectionView.extend({
+        tagName: 'ul',
+        itemViewClass: Ember.View.extend({
+            templateName: 'job',
+            didInsertElement: function() {
+                resize();
+                this.displayProgress();
+            },
+            displayProgress: function() {
+                var progressElement = this.$('.progress');
+
+                if (progressElement.length == 0)
+                    return;
+
+                var main = progressElement.prev();
+
+                var duration = this.content.get('duration');
+                var total = this.content.get('estimatedDuration');
+                var done = duration / total;
+
+                var width = Math.round(done * main.width());
+
+                progressElement.css({
+                    width: width
+                });
+            }
+        })
+    });
+
+    $(window).resize(_.throttle(resize, 200));
+
+//    App.update(_.debounce(_.bind(App.update, App), window.jenky.conf.jenkins.updateInterval));
 });

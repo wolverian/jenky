@@ -111,7 +111,7 @@ body {
         height: 100%;
     }
 
-    #jobs {
+    ul {
         margin: 0;
 
         columns: 2;

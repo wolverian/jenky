@@ -19,14 +19,15 @@
             <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
 
-        <ul id="jobs">
+        <script type="text/x-handlebars">
+            {{collection App.JobsView contentBinding="App.jobsController"}}
+        </script>
 
-        </ul>
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script src="js/vendor/jquery-1.8.2.js"></script>
         <script src="js/vendor/underscore-1.4.2.js"></script>
-        <script src="js/vendor/backbone-0.9.2.js"></script>
-        <script src="js/plugins.js"></script>
+        <script src="js/vendor/handlebars-1.0.0.beta.6.js"></script>
+        <script src="js/vendor/ember-1.0.0-pre.2.js"></script>
+        <script src="js/vendor/ember-data-latest.js"></script>
 
         <script src="js/conf.js"></script>
         <script src="js/main.js"></script>
@@ -44,14 +45,26 @@
             })();
         </script>
 
-        <script type="text/template" id="job-template">
-
-            <% if (lastBuild.building) { %>
-                <h2 class="<%= previousColor %>"><%= displayName %></h2>
-                <h2 class="progress <%= color %>"><%= displayName %></h2>
-            <% } else { %>
-                <h2 class="<%= color %>"><%= displayName %></h2>
-            <% } %>
+        <script type="text/x-handlebars" data-template-name="job">
+            {{#with view.content}}
+                {{#if building}}
+                    <h2>{{displayName}}</h2>
+                    <h2 {{bindAttr class=":progress color"}}>{{displayName}}</h2>
+                {{else}}
+                    <h2 {{bindAttr class="previousColor"}}>{{displayName}}</h2>
+                {{/if}}
+            {{/with}}
         </script>
+
+        <!--<script type="text/x-handlebars" data-template-name="job">-->
+            <!--{{#with view.content}}-->
+                <!--{{#if build.building}}-->
+                    <!--<h2 {{bindAttr class="previousColor"}}>{{displayName}}</h2>-->
+                    <!--<h2 {{bindAttr class="progress previousColor"}}>{{displayName}}</h2>-->
+                <!--{{else}}-->
+                    <!--<h2 {{bindAttr class="colo"}}>{{displayName}}</h2>-->
+                <!--{{/if}}-->
+            <!--{{/with}}-->
+        <!--</script>-->
     </body>
 </html>
