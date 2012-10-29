@@ -4,7 +4,7 @@ Jenky is a beautiful radiator for your [Jenkins][] CI server.
 
 ![Jenky in action][screenshot]
 
-A radiator show the status of your integration server's build and test jobs in
+A radiator shows the status of your integration server's build and test jobs in
 a large format suitable for showing on a large TV or monitor screen on a wall
 of your office.
 
