@@ -40,21 +40,26 @@ a {
 .callout-wrapper {
     text-align: center;
     float: right;
+    display: inline-block;
     margin-top: 8px;
-    color: #fff;
+    background: #ff4500;
     text-shadow: 0 -1px 1px #982700;
 }
 
 .callout {
-    background: #ff4500;
     display: inline-block;
     padding: 0.5em;
     font-size: 30px;
     text-align: center;
+    margin-bottom: 0;
 }
 
 .callout.wf-loading {
     visibility: hidden;
+}
+
+.callout-wrapper a {
+    color: #fff;
 }
 
 h2 {
