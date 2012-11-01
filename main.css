@@ -1,0 +1,151 @@
+* {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    text-rendering: optimizeLegibility;
+}
+
+html {
+    color: #333;
+}
+
+body {
+    font-size: 23px;
+    line-height: 35px;
+}
+
+h1, h2, h3, h4, h5, h6, .intro {
+    font-family: "futura-pt", sans-serif;
+}
+
+h1 {
+    font-size: 70px;
+    font-weight: 800;
+    margin-top: 0;
+}
+
+p {
+    margin-top: 0;
+    /*text-align: justify;*/
+    hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+}
+
+a {
+    color: #708090;
+    text-decoration: none;
+}
+
+.callout-wrapper {
+    text-align: center;
+    float: right;
+    margin-top: 8px;
+    color: #fff;
+    text-shadow: 0 -1px 1px #982700;
+}
+
+.callout {
+    background: #ff4500;
+    display: inline-block;
+    padding: 0.5em;
+    font-size: 30px;
+    text-align: center;
+}
+
+.callout.wf-loading {
+    visibility: hidden;
+}
+
+h2 {
+    font-size: 1em;
+    font-weight: 700;
+    margin-bottom: 0;
+}
+
+h2, p, textarea, input {
+    font-family: "calluna-sans", sans-serif;
+}
+
+p, textarea, input {
+    font-weight: 300;
+}
+
+.intro {
+    font-size: 40px;
+    line-height: 40px;
+    color: #9e9191;
+    font-weight: 300;
+    hyphens: none;
+    -moz-hyphens: none;
+    -webkit-hyphens: none;
+    text-align: left;
+    float: left;
+    width: 70%;
+}
+
+.callout-wrapper + p {
+    clear: both;
+}
+
+article {
+    margin-top: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    width: 660px;
+    padding: 46px 34px;
+    padding-bottom: 0;
+}
+
+img {
+    width: 80%;
+    margin: 2em auto;
+    display: block;
+}
+
+footer article {
+    margin-bottom: 23px;
+}
+
+footer p {
+    margin: 0;
+    color: #9e9191;
+    text-align: center;
+    font-family: "futura-pt", sans-serif;
+    font-weight: 300;
+}
+
+@media screen and (max-width: 768px) {
+    article {
+        margin: 1em;
+        padding: 0;
+        width: auto;
+    }
+
+    h1 {
+        font-size: 50px;
+        margin-top: 1em;
+    }
+
+    .intro {
+        font-size: 30px;
+        line-height: 35px;
+        float: none;
+        width: auto;
+    }
+
+    .callout-wrapper {
+        text-align: left;
+        float: none;
+        margin-top: 0;
+    }
+
+    .callout-wrapper + p {
+        margin-top: 2em;
+    }
+
+    img {
+        width: 95%;
+        margin: 2em 0;
+    }
+}
