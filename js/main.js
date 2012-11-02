@@ -18,29 +18,26 @@ $(function() {
     var JobsList = Backbone.Collection.extend({
         model: Job,
         url: window.jenky.conf.jenkins.url + '/api/json?tree=jobs[name,color,lastBuild[building,timestamp,estimatedDuration]]',
-        parse: function(response) {
-            return response.jobs;
-        },
         sync: function(method, model, options) {
-            if (method === "read") {
-                return $.ajax({
-                    url: this.url,
-                    dataType: 'jsonp',
-                    jsonp: 'jsonp'
-                }).then(_.bind(function(data) {
-                    var jobs = this.parse(data);
+            if (method !== "read")
+                return;
 
-                    _.forEach(jobs, function(job) {
-                        var existing = this.get(job.name);
+            return $.ajax({
+                url: this.url,
+                dataType: 'jsonp',
+                jsonp: 'jsonp'
+            }).then(_.bind(function(response) {
+                _.each(response.jobs, this.addOrUpdate, this);
+            }, this)).promise();
+        },
+        addOrUpdate: function(job) {
+            var existing = this.get(job.name);
 
-                        if (_.isUndefined(existing)) {
-                            this.add(job);
-                        } else {
-                            existing.set(job);
-                            existing.trigger('change');
-                        }
-                    }, this);
-                }, this)).promise();
+            if (_.isUndefined(existing)) {
+                this.add(job);
+            } else {
+                existing.set(job);
+                existing.trigger('change'); // TODO
             }
         }
     });
@@ -55,12 +52,10 @@ $(function() {
             this.model.on('destroy', this.remove, this);
         },
         render: function() {
-            console.log('rendering', this.model.get('name'));
-            var attributes = this.model.toJSON();
-            _.extend(attributes, {
+            var rendered = this.template(_.extend({}, this.model.toJSON(), {
                 previousColor: this.model.previousAttributes.color
-            });
-            this.$el.html(this.template(attributes));
+            }));
+            this.$el.html(rendered);
             this.showProgress();
             return this;
         },
@@ -113,8 +108,7 @@ $(function() {
         },
         addOne: function(job) {
             var view = new JobView({model: job});
-            view.$el.appendTo(this.$el);
-            view.render();
+            view.render().$el.appendTo(this.$el);
         },
         addAll: function() {
             this.$el.empty();
