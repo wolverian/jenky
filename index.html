@@ -35,7 +35,7 @@
         </script>
 
         <script type="text/template" id="job-template">
-            <% if (lastBuild.building) { %>
+            <% if (!_.isNull(lastBuild) && lastBuild.building) { %>
                 <h2 class="<%= previousColor %>"><%= displayName %></h2>
                 <h2 class="progress <%= color %>"><%= displayName %></h2>
             <% } else { %>
