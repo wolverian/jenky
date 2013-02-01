@@ -77,12 +77,12 @@ on is not listed in the issues, please add it.
 - [vluoto](https://github.com/vluoto)
 - [anttieov](https://github.com/anttieov)
 
-[screenshot]: https://raw.github.com/Eficode/jenky/master/img/screenshot.png
-[Download]: https://github.com/Eficode/jenky/zipball/master
+[screenshot]: https://raw.github.com/wolverian/jenky/master/img/screenshot.png
+[Download]: https://github.com/wolverian/jenky/zipball/master
 [Jenkins]: http://jenkins-ci.org
 [TypeKit]: http://typekit.com
-[conf]: https://github.com/Eficode/jenky/blob/master/js/conf.example.js
+[conf]: https://github.com/wolverian/jenky/blob/master/js/conf.example.js
 [freight]: https://typekit.com/fonts/freight-sans-pro
-[issues]: https://github.com/eficode/jenky/issues
-[pull requests]: https://github.com/eficode/jenky/pulls
+[issues]: https://github.com/wolverian/jenky/issues
+[pull requests]: https://github.com/wolverian/jenky/pulls
 [tw/wolverian]: https://twitter.com/wolverian
